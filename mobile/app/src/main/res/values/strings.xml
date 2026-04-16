@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">CalmingBreath</string>
+    <string name="input_your_current_heart_rate">Input your current heart rate</string>
+    <string name="measure_your_bpm">Measure your bpm in any convenient way</string>
+    <string name="begin_exercises">Begin exercises!</string>
+    <string name="incorrect_input_data">Incorrect input data!</string>
+    <string name="finally_results">Finally, results!</string>
+    <string name="before">Before</string>
+    <string name="after">After</string>
+
+    <string name="bpm"># bpm</string>
+    <string name="exercises_completed">Exercises completed!\nEnter your heart rate</string>
+    <string name="measure_your_bpm_after">Measure your bpm after the breathing exercise</string>
+    <string name="see_results">See results</string>
 </resources>

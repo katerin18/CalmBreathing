@@ -4,44 +4,76 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.calmingbreath.ui.theme.CalmingBreathTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.calmingbreath.data.ExerciseDatabase
+import com.example.calmingbreath.ui.navigation.ExerciseScreen
+import com.example.calmingbreath.ui.navigation.FirstHeartRateInputScreen
+import com.example.calmingbreath.ui.navigation.ResultsScreen
+import com.example.calmingbreath.ui.navigation.SecondHeartRateInputScreen
+import com.example.calmingbreath.ui.screens.ExerciseScreenView
+import com.example.calmingbreath.ui.screens.FirstHeartRateInputScreenView
+import com.example.calmingbreath.ui.screens.ResultsScreenView
+import com.example.calmingbreath.ui.screens.SecondHeartRateInputScreenView
+import com.example.calmingbreath.ui.viewmodel.ExerciseViewModel
+import com.example.calmingbreath.ui.viewmodel.HeartRateInputViewModel
+import com.example.calmingbreath.ui.viewmodel.HeartRateInputViewModelFactory
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val db = ExerciseDatabase.getDatabase(applicationContext)
+
         enableEdgeToEdge()
         setContent {
-            CalmingBreathTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+            val navController = rememberNavController()
+
+            val heartRateViewModel: HeartRateInputViewModel = viewModel(
+                factory = HeartRateInputViewModelFactory(db.exerciseDao())
+            )
+
+            NavHost(
+                navController = navController,
+                startDestination = FirstHeartRateInputScreen
+            ) {
+                composable<FirstHeartRateInputScreen> {
+                    FirstHeartRateInputScreenView(
+                        viewModel = heartRateViewModel,
+                        onNavigateToExercise = {
+                            navController.navigate(ExerciseScreen)
+                        }
+                    )
+                }
+
+                composable<ExerciseScreen> {
+                    val exerciseViewModel: ExerciseViewModel = viewModel()
+                    ExerciseScreenView(
+                        viewModel = exerciseViewModel,
+                        onNavigateNext = {
+                            heartRateViewModel.onExerciseDone()
+                            navController.navigate(SecondHeartRateInputScreen)
+                        }
+                    )
+                }
+
+                composable<SecondHeartRateInputScreen> {
+                    SecondHeartRateInputScreenView(
+                        viewModel = heartRateViewModel,
+                        onNavigateToResults = {
+                            navController.navigate(ResultsScreen)
+                        }
+                    )
+                }
+
+                composable<ResultsScreen> {
+                    ResultsScreenView(
+                        viewModel = heartRateViewModel
                     )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CalmingBreathTheme {
-        Greeting("Android")
     }
 }
