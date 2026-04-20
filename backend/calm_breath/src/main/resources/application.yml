@@ -1,0 +1,55 @@
+spring:
+    config:
+        import: optional:file:.env[.properties]
+
+    application:
+        name: calm_breath
+
+    datasource:
+        url: jdbc:postgresql://localhost:5432/calm_breath
+        username: ${DB_USERNAME}
+        password: ${DB_PASSWORD}
+        driver-class-name: org.postgresql.Driver
+
+    jpa:
+        hibernate:
+            ddl-auto: validate
+        properties:
+            "[hibernate.format_sql]": true
+            "[hibernate.dialect]": org.hibernate.dialect.PostgreSQLDialect
+        show-sql: false
+
+    liquibase:
+        change-log: classpath:db/changelog/db.changelog-master.xml
+        enabled: true
+
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: ${MAIL_USERNAME}
+        password: ${MAIL_PASSWORD}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
+                        required: true
+
+    security:
+        user:
+            password: ${ACTUATOR_PASSWORD:admin}
+
+jwt:
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    expiration: 3600000 # 1 час
+    refresh-expiration: 604800000 # 7 дней
+
+app:
+    frontend:
+        url: ${FRONTEND_URL:http://localhost:3000}
+
+logging:
+    level:
+        com.example.auth: DEBUG
+        org.springframework.security: INFO
