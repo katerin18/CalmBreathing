@@ -34,9 +34,11 @@ public class User {
     private String lastName;
     
     @Column(name = "enabled", nullable = false)
+    @Builder.Default
     private Boolean enabled = true;
     
     @Column(name = "email_verified", nullable = false)
+    @Builder.Default
     private Boolean emailVerified = false;
     
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -51,6 +53,7 @@ public class User {
         joinColumns = @JoinColumn(name = "user_id"),
         inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @Builder.Default
     private java.util.Set<Role> roles = new java.util.HashSet<>();
     
     @PrePersist
