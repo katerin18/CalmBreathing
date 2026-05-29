@@ -85,21 +85,6 @@ fun HeartRateInputContent(
                         lineLimits = TextFieldLineLimits.SingleLine,
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
-
-                    IconButton(onClick = {
-                        val bpm = checkInputBpm(state.text.toString())
-
-                        if (bpm != null) {
-                            onAddBpmButtonClick(bpm)
-                        } else {
-                            showToast(context, context.getString(R.string.incorrect_input_data))
-                        }
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.AddTask,
-                            contentDescription = null
-                        )
-                    }
                 }
 
                 Spacer(Modifier.height(5.dp))
@@ -108,17 +93,27 @@ fun HeartRateInputContent(
                     text = "Normal values are in 60..90 bpm",
                     fontWeight = FontWeight.Light
                 )
-            }
 
-            Spacer(Modifier.height(55.dp))
 
-            Button(
-                onClick = onExerciseButtonClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 50.dp)
-            ) {
-                Text(text = buttonText)
+                Spacer(Modifier.height(55.dp))
+
+                Button(
+                    onClick = {
+                        val bpm = checkInputBpm(state.text.toString())
+
+                        if (bpm != null) {
+                            onAddBpmButtonClick(bpm)
+                            onExerciseButtonClick()
+                        } else {
+                            showToast(context, context.getString(R.string.incorrect_input_data))
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 50.dp)
+                ) {
+                    Text(text = buttonText)
+                }
             }
         }
     }
