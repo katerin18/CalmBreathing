@@ -10,7 +10,7 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
 # Копируем исходники
-COPY src ./src
+COPY src ./calm_breath/src
 
 # Собираем JAR
 RUN mvn clean package -DskipTests
