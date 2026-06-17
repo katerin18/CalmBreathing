@@ -6,9 +6,9 @@ spring:
         name: calm_breath
 
     datasource:
-        url: jdbc:postgresql://localhost:5432/calm_breath
-        username: ${DB_USERNAME}
-        password: ${DB_PASSWORD}
+        url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/calm_breath}
+        username: ${DB_USERNAME:calm_user}
+        password: ${DB_PASSWORD:calm_password}
         driver-class-name: org.postgresql.Driver
 
     jpa:
@@ -53,3 +53,6 @@ logging:
     level:
         com.example.auth: DEBUG
         org.springframework.security: INFO
+
+server:
+    port: ${SERVER_PORT:8080}
