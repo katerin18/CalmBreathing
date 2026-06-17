@@ -1,7 +1,7 @@
 # ================================
 # ЭТАП 1: Сборка проекта
 # ================================
-FROM maven:3.9.6-eclipse-temurin-21 AS build
+FROM maven:3.9.6-eclipse-temulin-21 AS build
 
 WORKDIR /app
 
@@ -10,9 +10,9 @@ COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
 # Копируем исходники
-COPY src ./calm_breath/src
+COPY src ./src
 
-# Собираем JAR
+# Собираем JAR (пропускаем тесты для скорости)
 RUN mvn clean package -DskipTests
 
 # ================================
@@ -32,5 +32,5 @@ USER appuser
 # Точка входа
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
-# Открываем порт (замените на ваш)
+# Открываем порт (из application.yml - 8080)
 EXPOSE 8080

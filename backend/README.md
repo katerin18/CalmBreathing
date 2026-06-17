@@ -2,43 +2,6 @@
 
 REST API сервер для мобильного приложения управления дыхательными упражнениями.
 
-## Docker
-
-Для локального запуска в контейнерах из корня `backend` используйте:
-
-```bash
-cd calm_breath
-./mvnw -DskipTests package
-cd ..
-docker compose up --build
-```
-
-Теперь Docker не собирает Maven-проект внутри образа, а просто упаковывает уже готовый jar из `calm_breath/target`. Это убирает проблему скачивания зависимостей в контейнере.
-
-### Публикация образа
-
-Пример для Docker Hub:
-
-```bash
-cd backend\calm_breath
-./mvnw.cmd -DskipTests package
-docker build -t your-dockerhub-user/calm-breath-backend:1.0.0 .
-docker login
-docker push your-dockerhub-user/calm-breath-backend:1.0.0
-```
-
-Если нужен GitHub Container Registry, используйте такой формат тега:
-
-```bash
-cd backend\calm_breath
-./mvnw.cmd -DskipTests package
-docker build -t ghcr.io/your-github-user-or-org/calm-breath-backend:1.0.0 .
-docker login ghcr.io
-docker push ghcr.io/your-github-user-or-org/calm-breath-backend:1.0.0
-```
-
-После публикации образ можно запускать на любом сервере через `docker run` или подключать его в `docker-compose.yml` вместо локальной сборки.
-
 ## 📋 Содержание
 
 - [Архитектура](#архитектура)
