@@ -201,6 +201,24 @@ fun ExerciseScreenView(
                     )
                 }
             }
+
+            Spacer(Modifier.height(16.dp))
+
+            Button(
+                onClick = viewModel::onFinishEarly,
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = SecondaryButtonBg),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.finish_early),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = SecondaryButtonText
+                )
+            }
         }
     }
 }
