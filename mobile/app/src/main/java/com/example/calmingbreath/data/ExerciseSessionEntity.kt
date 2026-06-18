@@ -10,5 +10,7 @@ data class ExerciseSessionEntity(
     @ColumnInfo("bpm_before") val bpmBefore: Int = 0,
     @ColumnInfo("bpm_after") val bpmAfter: Int = 0,
     @ColumnInfo("exercise_duration") val exercisesDurationSec: Long = 0L,
-    @ColumnInfo("start_exercise_time") val startExerciseTime: Long = 0L
+    @ColumnInfo("start_exercise_time") val startExerciseTime: Long = 0L,
+    @ColumnInfo("completed") val completed: Boolean = false,
+    @ColumnInfo("synced") val synced: Boolean = false
 )

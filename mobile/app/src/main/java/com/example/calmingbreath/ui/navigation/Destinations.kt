@@ -3,7 +3,10 @@ package com.example.calmingbreath.ui.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeScreen // пока не будет использоваться
+object LoginRoute
+
+@Serializable
+object RegisterRoute
 
 @Serializable
 object FirstHeartRateInputScreen
@@ -16,3 +19,6 @@ object SecondHeartRateInputScreen
 
 @Serializable
 object ResultsScreen
+
+@Serializable
+object HistoryScreen
