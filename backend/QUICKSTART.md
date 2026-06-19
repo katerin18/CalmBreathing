@@ -41,21 +41,10 @@
   - Database verification
   - Troubleshooting
 
-### 6️⃣ Дополнительно
-- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Что было создано
-  - Все компоненты
-  - Технологический стек
-  - Статистика проекта
-
 - **[INDEX.md](./INDEX.md)** - Навигация по документации
   - Структура файлов
   - FAQ
   - Workflow разработки
-
-- **[FINAL_SUMMARY.md](./FINAL_SUMMARY.md)** - Финальный отчет
-  - Что реализовано
-  - Статистика
-  - Следующие шаги
 
 ---
 

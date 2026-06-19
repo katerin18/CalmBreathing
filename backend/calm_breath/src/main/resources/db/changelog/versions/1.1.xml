@@ -3,10 +3,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.20.xsd">
 
-    <changeSet id="0-create-test-table" author="fiyalo" dbms="postgresql">
-        <sqlFile splitStatements="false" relativeToChangelogFile="true" path="../sql/1.1/0-create-test-table.sql"/>
-    </changeSet>
-
     <changeSet id="1-create-user-table" author="fiyalo" dbms="postgresql">
         <sqlFile splitStatements="false" relativeToChangelogFile="true" path="../sql/1.1/1-create-user-table.sql"/>
     </changeSet>
