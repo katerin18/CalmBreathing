@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Сервис для работы с замерами пульса
@@ -61,6 +63,27 @@ public class MeasurementService {
                 ));
 
         return mapToResponse(measurement);
+    }
+
+    public List<PulseMeasurementResponse> getAllMeasurements() {
+        User user = getCurrentUser();
+
+        List<Measurement> measurements = measurementRepository
+                .findByUser_IdOrderByMeasuredAtDescCreatedAtDesc(user.getId());
+
+        if (measurements.isEmpty()) {
+            throw new CustomException(
+                    "Замеры для пользователя не найдены",
+                    "MEASUREMENT_NOT_FOUND",
+                    HttpStatus.NOT_FOUND.value()
+            );
+        }
+
+        log.info("Found {} measurements for user: {}", measurements.size(), user.getId());
+        
+        return measurements.stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     private User getCurrentUser() {
