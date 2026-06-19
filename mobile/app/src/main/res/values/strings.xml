@@ -1,3 +1,56 @@
 <resources>
     <string name="app_name">CalmingBreath</string>
+    <string name="input_your_current_heart_rate">Input your current heart rate</string>
+    <string name="measure_your_bpm">Measure your bpm in any convenient way</string>
+    <string name="begin_exercises">Begin exercises!</string>
+    <string name="incorrect_input_data">Некорректное значение пульса</string>
+    <string name="finally_results">Finally, results!</string>
+    <string name="before">Before</string>
+    <string name="after">After</string>
+
+    <string name="bpm"># bpm</string>
+    <string name="exercises_completed">Измерьте пульс после</string>
+    <string name="measure_your_bpm_after">Посмотрите, как изменился ваш пульс после упражнения</string>
+    <string name="see_results">Посмотреть результат</string>
+
+    <string name="measure_current_heart_rate">Измерьте текущий пульс</string>
+    <string name="measure_to_see_effect">Сейчас измерьте пульс, чтобы увидеть эффект упражнения</string>
+    <string name="enter_heart_rate_value">Введите значение пульса (уд/мин)</string>
+    <string name="panic_heart_rate_hint">Во время панической атаки пульс часто бывает учащенным. Это нормально. Упражнение поможет его успокоить.</string>
+    <string name="start_exercise">Начать упражнение</string>
+    <string name="logout">Выйти</string>
+    <string name="greeting">Привет, %1$s!</string>
+
+    <string name="exercise_title">Дыхательное упражнение</string>
+    <string name="exercise_stage">Этап %1$d из 5</string>
+    <string name="exercise_cycle_info">Вдох %1$dс · Выдох %2$dс · Задержка %3$dс</string>
+    <string name="phase_inhale">Вдох</string>
+    <string name="phase_exhale">Выдох</string>
+    <string name="phase_hold">Задержка</string>
+    <string name="seconds_short">%1$d с</string>
+    <string name="restart">Заново</string>
+    <string name="start">Старт</string>
+    <string name="back">Назад</string>
+    <string name="pause">Пауза</string>
+    <string name="finish_early">Закончить упражнение</string>
+
+    <string name="results_title_decrease">Отличный результат!</string>
+    <string name="results_title_no_change">Результат</string>
+    <string name="results_subtitle_decrease">Ваш пульс снизился. Упражнение помогло вам успокоиться.</string>
+    <string name="results_subtitle_increase">Ваш пульс немного вырос. Попробуйте повторить упражнение.</string>
+    <string name="results_subtitle_no_change">Ваш пульс не изменился.</string>
+    <string name="results_label_before">До</string>
+    <string name="results_label_after">После</string>
+    <string name="bpm_unit">уд/мин</string>
+    <string name="results_change_decrease">Снижение (%1$s%%)</string>
+    <string name="results_change_increase">Повышение (%1$s%%)</string>
+    <string name="results_change_no_change">Без изменений</string>
+    <string name="results_tip">Регулярная практика дыхательных упражнений улучшает результаты. Попробуйте выполнять упражнения 2-3 раза в день.</string>
+    <string name="results_back_home">Вернуться на главную</string>
+
+    <string name="history_title">История замеров</string>
+    <string name="history_empty">Пока нет замеров</string>
+    <string name="history_duration">Длительность: %1$s</string>
+    <string name="history_error">Не удалось загрузить историю</string>
+    <string name="history_retry">Повторить</string>
 </resources>
