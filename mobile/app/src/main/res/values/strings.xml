@@ -51,4 +51,6 @@
     <string name="history_title">История замеров</string>
     <string name="history_empty">Пока нет замеров</string>
     <string name="history_duration">Длительность: %1$s</string>
+    <string name="history_error">Не удалось загрузить историю</string>
+    <string name="history_retry">Повторить</string>
 </resources>

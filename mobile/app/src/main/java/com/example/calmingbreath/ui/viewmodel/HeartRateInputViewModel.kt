@@ -9,6 +9,7 @@ import com.example.calmingbreath.MeasurementRequest
 import com.example.calmingbreath.MeasurementsApi
 import com.example.calmingbreath.RetrofitLogic
 import com.example.calmingbreath.TokenManager
+import com.example.calmingbreath.UserStore
 import com.example.calmingbreath.data.ExerciseSessionDao
 import com.example.calmingbreath.data.ExerciseSessionEntity
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,10 +36,14 @@ data class HeartRateInputScreenState(
 class HeartRateInputViewModel(
     val dao: ExerciseSessionDao,
     private val measurementsApi: MeasurementsApi,
+    private val userStore: UserStore,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(HeartRateInputScreenState())
     val state: StateFlow<HeartRateInputScreenState> = _state.asStateFlow()
+
+    // Читаем динамически: один и тот же VM живёт между сменами аккаунта.
+    private fun currentUserId(): String = userStore.getUser()?.id ?: ""
 
     init {
         // При старте досылаем замеры, которые не успели уйти на бэкенд в прошлый раз.
@@ -66,7 +71,7 @@ class HeartRateInputViewModel(
             _state.update { it.copy(heartRateBefore = bpm) }
             viewModelScope.launch {
                 val insertionId = dao.insertStartData(
-                    ExerciseSessionEntity(bpmBefore = bpm)
+                    ExerciseSessionEntity(bpmBefore = bpm, userId = currentUserId())
                 )
                 _state.update { it.copy(insertionId = insertionId) }
             }
@@ -97,8 +102,10 @@ class HeartRateInputViewModel(
     }
 
     private fun syncPendingMeasurements() {
+        val userId = currentUserId()
+        if (userId.isEmpty()) return
         viewModelScope.launch {
-            dao.getUnsynced().forEach { e ->
+            dao.getUnsynced(userId).forEach { e ->
                 sendAndMark(
                     id = e.id,
                     startPulse = e.bpmBefore,
@@ -158,6 +165,7 @@ class HeartRateInputViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val tokenManager = TokenManager(context)
         val measurementsApi = RetrofitLogic.createMeasurementsApi(tokenManager)
-        return HeartRateInputViewModel(dao, measurementsApi) as T
+        val userStore = UserStore(context)
+        return HeartRateInputViewModel(dao, measurementsApi, userStore) as T
     }
 }

@@ -159,7 +159,7 @@ class MainActivity : ComponentActivity() {
 
                 composable<HistoryScreen> {
                     val historyViewModel: HistoryViewModel = viewModel(
-                        factory = HistoryViewModelFactory(db.exerciseDao())
+                        factory = HistoryViewModelFactory(applicationContext)
                     )
                     HistoryScreenView(
                         viewModel = historyViewModel,

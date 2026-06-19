@@ -28,9 +28,9 @@ interface ExerciseSessionDao {
     @Query("UPDATE exercise_db SET synced = 1 WHERE id = :id")
     suspend fun markSynced(id: Long)
 
-    // Завершённые, но ещё не отправленные на бэкенд замеры.
-    @Query("SELECT * FROM exercise_db WHERE synced = 0 AND completed = 1")
-    suspend fun getUnsynced(): List<ExerciseSessionEntity>
+    // Завершённые, но ещё не отправленные на бэкенд замеры текущего пользователя.
+    @Query("SELECT * FROM exercise_db WHERE synced = 0 AND completed = 1 AND user_id = :userId")
+    suspend fun getUnsynced(userId: String): List<ExerciseSessionEntity>
 
     // Вся завершённая история замеров, свежие сверху.
     @Query("SELECT * FROM exercise_db WHERE completed = 1 ORDER BY start_exercise_time DESC")

@@ -12,5 +12,6 @@ data class ExerciseSessionEntity(
     @ColumnInfo("exercise_duration") val exercisesDurationSec: Long = 0L,
     @ColumnInfo("start_exercise_time") val startExerciseTime: Long = 0L,
     @ColumnInfo("completed") val completed: Boolean = false,
-    @ColumnInfo("synced") val synced: Boolean = false
+    @ColumnInfo("synced") val synced: Boolean = false,
+    @ColumnInfo("user_id") val userId: String = ""
 )

@@ -47,4 +47,13 @@ data class MeasurementRequest(
     val measuredAt: String, // ISO local date-time, напр. "2026-05-14T10:30:00"
 )
 
+data class MeasurementResponse(
+    val id: String,
+    val userId: String,
+    val startPulse: Int,
+    val exerciseDurationSeconds: Long,
+    val endPulse: Int,
+    val measuredAt: String,
+    val createdAt: String,
+)
 
