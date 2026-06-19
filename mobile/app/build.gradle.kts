@@ -82,4 +82,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
 
     ksp("androidx.room:room-compiler:$room_version")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
 }

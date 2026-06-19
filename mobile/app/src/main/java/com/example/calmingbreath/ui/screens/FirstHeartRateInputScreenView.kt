@@ -11,7 +11,11 @@ import com.example.calmingbreath.ui.viewmodel.HeartRateInputViewModel
 @Composable
 fun FirstHeartRateInputScreenView(
     viewModel: HeartRateInputViewModel,
-    onNavigateToExercise: () -> Unit
+    onNavigateToExercise: () -> Unit,
+    onBack: (() -> Unit)? = null,
+    onLogout: (() -> Unit)? = null,
+    onViewHistory: (() -> Unit)? = null,
+    userName: String? = null,
 ) {
     val state by viewModel.state.collectAsState()
 
@@ -23,10 +27,15 @@ fun FirstHeartRateInputScreenView(
     }
 
     HeartRateInputContent(
-        title = stringResource(R.string.input_your_current_heart_rate),
-        subtitle = stringResource(R.string.measure_your_bpm),
-        buttonText = stringResource(R.string.begin_exercises),
+        title = stringResource(R.string.measure_current_heart_rate),
+        subtitle = stringResource(R.string.measure_to_see_effect),
+        buttonText = stringResource(R.string.start_exercise),
+        infoText = stringResource(R.string.panic_heart_rate_hint),
         onExerciseButtonClick = viewModel::onBeginExercises,
-        onAddBpmButtonClick = { viewModel.addBpm(bpm = it, isBefore = true) }
+        onAddBpmButtonClick = { viewModel.addBpm(bpm = it, isBefore = true) },
+        onBack = onBack,
+        onLogout = onLogout,
+        onViewHistory = onViewHistory,
+        userName = userName,
     )
 }

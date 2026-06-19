@@ -14,14 +14,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Replay
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,13 +32,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.calmingbreath.R
 import com.example.calmingbreath.ui.viewmodel.BreathingPhase
 import com.example.calmingbreath.ui.viewmodel.ExerciseViewModel
+
+private val ExerciseTitleColor = Color(0xFF2C2C2A)
+private val ExerciseSubtitleColor = Color(0xFF6B6B66)
+private val SecondaryButtonBg = Color(0xFFE6E5DF)
+private val SecondaryButtonText = Color(0xFF4A4A45)
 
 @Composable
 fun ExerciseScreenView(
@@ -76,54 +82,61 @@ fun ExerciseScreenView(
 
     val currentCycle = cycles[state.currentCycleIndex]
     val phaseText = when (state.currentPhase) {
-        BreathingPhase.INHALE -> "Inhale"
-        BreathingPhase.EXHALE -> "Exhale"
-        BreathingPhase.HOLD -> "Hold"
+        BreathingPhase.INHALE -> stringResource(R.string.phase_inhale)
+        BreathingPhase.EXHALE -> stringResource(R.string.phase_exhale)
+        BreathingPhase.HOLD -> stringResource(R.string.phase_hold)
     }
 
-    Scaffold { innerPadding ->
+    Scaffold(containerColor = ScreenBg) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Calming Breathing",
+                text = stringResource(R.string.exercise_title),
                 fontSize = 26.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = ExerciseTitleColor,
+                textAlign = TextAlign.Center
             )
 
             Spacer(Modifier.height(6.dp))
 
             Text(
-                text = "Stage ${currentCycle.stage} of 5",
+                text = stringResource(R.string.exercise_stage, currentCycle.stage),
                 fontSize = 16.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = ExerciseSubtitleColor
             )
 
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = "Inhale ${currentCycle.inhaleSeconds}s · Exhale ${currentCycle.exhaleSeconds}s · Hold ${currentCycle.holdSeconds}s",
+                text = stringResource(
+                    R.string.exercise_cycle_info,
+                    currentCycle.inhaleSeconds,
+                    currentCycle.exhaleSeconds,
+                    currentCycle.holdSeconds
+                ),
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = ExerciseSubtitleColor
             )
 
             Spacer(Modifier.height(40.dp))
 
             // Анимированный круг
-            val circleColor = MaterialTheme.colorScheme.primary
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(240.dp)
             ) {
                 Canvas(modifier = Modifier.fillMaxSize()) {
                     drawCircle(
-                        color = circleColor,
+                        color = SageGreen,
                         radius = (size.minDimension / 2f) * scale.value,
-                        alpha = 0.75f
+                        alpha = 0.85f
                     )
                 }
                 Text(
@@ -138,9 +151,10 @@ fun ExerciseScreenView(
             Spacer(Modifier.height(16.dp))
 
             Text(
-                text = "${state.secondsRemaining}s",
+                text = stringResource(R.string.seconds_short, state.secondsRemaining),
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = ExerciseTitleColor
             )
 
             Spacer(Modifier.height(40.dp))
@@ -149,22 +163,61 @@ fun ExerciseScreenView(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                OutlinedButton(onClick = viewModel::onRestart) {
-                    Icon(Icons.Default.Replay, contentDescription = null)
+                Button(
+                    onClick = viewModel::onRestart,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = SecondaryButtonBg),
+                    modifier = Modifier.height(54.dp)
+                ) {
+                    Icon(Icons.Default.Replay, contentDescription = null, tint = SecondaryButtonText)
                     Spacer(Modifier.width(6.dp))
-                    Text("Restart")
+                    Text(
+                        stringResource(R.string.restart),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = SecondaryButtonText
+                    )
                 }
 
                 Spacer(Modifier.width(16.dp))
 
-                Button(onClick = viewModel::onPause) {
+                Button(
+                    onClick = viewModel::onPause,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                    modifier = Modifier.height(54.dp)
+                ) {
                     Icon(
                         imageVector = if (state.isPaused) Icons.Default.PlayArrow else Icons.Default.Pause,
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color.White
                     )
                     Spacer(Modifier.width(6.dp))
-                    Text(if (state.isPaused) "Start" else "Pause")
+                    Text(
+                        if (state.isPaused) stringResource(R.string.start) else stringResource(R.string.pause),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White
+                    )
                 }
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            Button(
+                onClick = viewModel::onFinishEarly,
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = SecondaryButtonBg),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.finish_early),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Medium,
+                    color = SecondaryButtonText
+                )
             }
         }
     }
