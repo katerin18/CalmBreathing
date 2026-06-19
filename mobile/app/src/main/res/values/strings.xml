@@ -3,15 +3,15 @@
     <string name="input_your_current_heart_rate">Input your current heart rate</string>
     <string name="measure_your_bpm">Measure your bpm in any convenient way</string>
     <string name="begin_exercises">Begin exercises!</string>
-    <string name="incorrect_input_data">Incorrect input data!</string>
+    <string name="incorrect_input_data">Некорректное значение пульса</string>
     <string name="finally_results">Finally, results!</string>
     <string name="before">Before</string>
     <string name="after">After</string>
 
     <string name="bpm"># bpm</string>
-    <string name="exercises_completed">Exercises completed!\nEnter your heart rate</string>
-    <string name="measure_your_bpm_after">Measure your bpm after the breathing exercise</string>
-    <string name="see_results">See results</string>
+    <string name="exercises_completed">Измерьте пульс после</string>
+    <string name="measure_your_bpm_after">Посмотрите, как изменился ваш пульс после упражнения</string>
+    <string name="see_results">Посмотреть результат</string>
 
     <string name="measure_current_heart_rate">Измерьте текущий пульс</string>
     <string name="measure_to_see_effect">Сейчас измерьте пульс, чтобы увидеть эффект упражнения</string>
@@ -32,6 +32,7 @@
     <string name="start">Старт</string>
     <string name="back">Назад</string>
     <string name="pause">Пауза</string>
+    <string name="finish_early">Закончить упражнение</string>
 
     <string name="results_title_decrease">Отличный результат!</string>
     <string name="results_title_no_change">Результат</string>
@@ -50,4 +51,6 @@
     <string name="history_title">История замеров</string>
     <string name="history_empty">Пока нет замеров</string>
     <string name="history_duration">Длительность: %1$s</string>
+    <string name="history_error">Не удалось загрузить историю</string>
+    <string name="history_retry">Повторить</string>
 </resources>

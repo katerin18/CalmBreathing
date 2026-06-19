@@ -128,6 +128,11 @@ class ExerciseViewModel : ViewModel() {
         startExercise()
     }
 
+    fun onFinishEarly() {
+        exerciseJob?.cancel()
+        _state.update { it.copy(isPaused = true, isFinished = true, shouldNavigateNext = true) }
+    }
+
     fun onNavigationHandled() {
         _state.update { it.copy(shouldNavigateNext = false) }
     }

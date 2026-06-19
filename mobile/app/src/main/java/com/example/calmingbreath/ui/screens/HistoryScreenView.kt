@@ -19,6 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -33,11 +36,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.calmingbreath.MeasurementResponse
 import com.example.calmingbreath.R
-import com.example.calmingbreath.data.ExerciseSessionEntity
 import com.example.calmingbreath.ui.viewmodel.HistoryViewModel
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 import kotlin.math.abs
 
@@ -53,7 +55,7 @@ fun HistoryScreenView(
     viewModel: HistoryViewModel,
     onBack: () -> Unit,
 ) {
-    val history by viewModel.history.collectAsState()
+    val state by viewModel.state.collectAsState()
 
     Scaffold(
         containerColor = ScreenBg,
@@ -82,29 +84,57 @@ fun HistoryScreenView(
             }
         },
     ) { innerPadding ->
-        if (history.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = stringResource(R.string.history_empty),
-                    fontSize = 16.sp,
-                    color = HistorySubtitleColor,
-                )
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                items(history, key = { it.id }) { item ->
-                    HistoryCard(item)
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            when {
+                state.isLoading -> {
+                    CircularProgressIndicator(color = SageGreen)
+                }
+
+                state.isError -> {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text(
+                            text = stringResource(R.string.history_error),
+                            fontSize = 16.sp,
+                            color = HistorySubtitleColor,
+                        )
+                        Spacer(Modifier.height(12.dp))
+                        Button(
+                            onClick = viewModel::load,
+                            shape = RoundedCornerShape(12.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = SageGreen),
+                        ) {
+                            Text(
+                                text = stringResource(R.string.history_retry),
+                                fontWeight = FontWeight.Medium,
+                                color = Color.White,
+                            )
+                        }
+                    }
+                }
+
+                state.items.isEmpty() -> {
+                    Text(
+                        text = stringResource(R.string.history_empty),
+                        fontSize = 16.sp,
+                        color = HistorySubtitleColor,
+                    )
+                }
+
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        items(state.items, key = { it.id }) { item ->
+                            HistoryCard(item)
+                        }
+                    }
                 }
             }
         }
@@ -112,8 +142,8 @@ fun HistoryScreenView(
 }
 
 @Composable
-private fun HistoryCard(item: ExerciseSessionEntity) {
-    val diff = item.bpmBefore - item.bpmAfter // > 0 => пульс снизился
+private fun HistoryCard(item: MeasurementResponse) {
+    val diff = item.startPulse - item.endPulse // > 0 => пульс снизился
     val accent = if (diff >= 0) HistoryAccentDown else HistoryAccentUp
     val sign = if (diff > 0) "−" else if (diff < 0) "+" else ""
 
@@ -124,7 +154,7 @@ private fun HistoryCard(item: ExerciseSessionEntity) {
             .padding(16.dp),
     ) {
         Text(
-            text = formatDate(item.startExerciseTime),
+            text = formatDate(item.measuredAt),
             fontSize = 13.sp,
             color = HistorySubtitleColor,
         )
@@ -136,7 +166,7 @@ private fun HistoryCard(item: ExerciseSessionEntity) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = item.bpmBefore.toString(),
+                text = item.startPulse.toString(),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = HistoryTitleColor,
@@ -150,7 +180,7 @@ private fun HistoryCard(item: ExerciseSessionEntity) {
             )
             Spacer(Modifier.size(10.dp))
             Text(
-                text = item.bpmAfter.toString(),
+                text = item.endPulse.toString(),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 color = HistoryTitleColor,
@@ -173,16 +203,21 @@ private fun HistoryCard(item: ExerciseSessionEntity) {
         Spacer(Modifier.height(8.dp))
 
         Text(
-            text = stringResource(R.string.history_duration, formatDuration(item.exercisesDurationSec)),
+            text = stringResource(R.string.history_duration, formatDuration(item.exerciseDurationSeconds)),
             fontSize = 13.sp,
             color = HistoryCardLabel,
         )
     }
 }
 
-private fun formatDate(epochMillis: Long): String {
-    val formatter = SimpleDateFormat("d MMM yyyy, HH:mm", Locale("ru"))
-    return formatter.format(Date(epochMillis))
+private fun formatDate(isoLocal: String): String {
+    return try {
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
+        val date = parser.parse(isoLocal) ?: return isoLocal
+        SimpleDateFormat("d MMM yyyy, HH:mm", Locale("ru")).format(date)
+    } catch (e: Exception) {
+        isoLocal
+    }
 }
 
 private fun formatDuration(totalSeconds: Long): String {

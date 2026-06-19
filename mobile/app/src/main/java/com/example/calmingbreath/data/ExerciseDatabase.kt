@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
-@Database(entities = [ExerciseSessionEntity::class], version = 3)
+@Database(entities = [ExerciseSessionEntity::class], version = 4)
 abstract class ExerciseDatabase: RoomDatabase() {
     abstract fun exerciseDao(): ExerciseSessionDao
 
@@ -31,10 +31,18 @@ abstract class ExerciseDatabase: RoomDatabase() {
             }
         }
 
+        // v3 -> v4: привязка строки к пользователю. Старые строки получают пустой user_id
+        // и не будут выгружаться ни в один аккаунт.
+        private val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE exercise_db ADD COLUMN user_id TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
         fun getDatabase(context: Context): ExerciseDatabase {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(context, ExerciseDatabase::class.java, "exercise_db")
-                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
                     .build()
                     .also { Instance = it }
             }
